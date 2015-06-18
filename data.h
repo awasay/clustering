@@ -45,8 +45,8 @@ public:
 	
 	Data();			/*Constructor*/
 	~Data();		/*Destructor*/
-	int LoadData(char** filename);  		/* Load values from a file */
-	DataType GetDataPoint(int position);  	/* Given a certain position, get the value from the dataset */
+	int LoadData(char** filename, int data_size);  		/* Load values from a file */
+	DataPoint GetDataPoint(int position);  	/* Given a certain position, get the value from the dataset */
 	float GetDistance(int data_point_position, int cluster_center_position); /*Get the distance between two points*/
 	int AddClusterCenters(int data_point_position);	/* Add cluster centers */
 
