@@ -1,6 +1,15 @@
 #ifndef DATA_H
 #define DATA_H
 
+#include <assert.h>
+#include <math.h>
+#include <fstream>
+#include <iostream>
+#include <string>
+
+#include "misc.h"
+using namespace std;
+
 /*****************************************************
 
 The API to interact with the data set. 
@@ -15,7 +24,7 @@ The API to interact with the data set.
 	Data type (INT by default)
 */
 
-typedef int DataType;
+typedef float DataType;
 
 /**
 	each point in the data set has a dimension and values.
@@ -45,22 +54,22 @@ public:
 	
 	Data();			/*Constructor*/
 	~Data();		/*Destructor*/
-	int LoadData(char** filename, int data_size);  		/* Load values from a file */
+	int LoadData(string file_name, int data_size, int dimension);  		/* Load values from a file */
 	DataPoint GetDataPoint(int position);  	/* Given a certain position, get the value from the dataset */
 	float GetDistance(int data_point_position, int cluster_center_position); /*Get the distance between two points*/
 	int AddClusterCenters(int data_point_position);	/* Add cluster centers */
-
+	int PrintData();
 
 };
 
 
 
 int main(){
+	Data* d = new Data();
+	d->LoadData("test.data",3,3);
+	d->PrintData();
 	return 0;
 }
-
-
-
 
 
 #endif

@@ -9,7 +9,7 @@ LINKER_OPT       = -L/usr/lib -lstdc++
 PREDEF		 	 = -D
 OUT_DIR          = ./bin/
 
-DEP = data.h
+DEP = data.h misc.h
 DC 	= data.cc 
 
 BUILD+=CLUSTERING
