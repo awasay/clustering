@@ -6,8 +6,9 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <sstream>
+#include <vector>
 
-#include "misc.h"
 using namespace std;
 
 /*****************************************************
@@ -36,7 +37,7 @@ struct DataPoint{
 };
 
 struct ClusterCenters{
-	DataPoint* center;
+	DataPoint* centers;
 	int current_position=0;
 	int cluster_centers_size;
 };
@@ -50,26 +51,25 @@ private:
 	int data_points_size;				/*  Number of data points */
 	ClusterCenters* cluster_centers;	/*  The cluster centers */
 
+	vector<string> divide(const string &s, char delim);
+	vector<string>& divide(const string &s, char delim, vector<string> &elems);
+
+
 public:
 	
 	Data();			/*Constructor*/
 	~Data();		/*Destructor*/
+	int initialize(int k);
 	int LoadData(string file_name, int data_size, int dimension);  		/* Load values from a file */
 	DataPoint GetDataPoint(int position);  	/* Given a certain position, get the value from the dataset */
 	float GetDistance(int data_point_position, int cluster_center_position); /*Get the distance between two points*/
 	int AddClusterCenters(int data_point_position);	/* Add cluster centers */
 	int PrintData();
 
+
+
 };
 
-
-
-int main(){
-	Data* d = new Data();
-	d->LoadData("test.data",3,3);
-	d->PrintData();
-	return 0;
-}
 
 
 #endif

@@ -1,5 +1,5 @@
 
-COMPILER         = -c++
+COMPILER         = g++
 OPTIMIZATION_OPT = -O3
 OPTIONS          = -g -ggdb -pthread -std=c++11 -W -Wall -lnuma -lrt -W -Wno-long-long $(OPTIMIZATION_OPT)
 LINKER_OPT       = -L/usr/lib -lstdc++
@@ -9,8 +9,8 @@ LINKER_OPT       = -L/usr/lib -lstdc++
 PREDEF		 	 = -D
 OUT_DIR          = ./bin/
 
-DEP = data.h misc.h
-DC 	= data.cc 
+DEP = data.h
+DC 	= data.cc test.cc
 
 BUILD+=CLUSTERING
 
