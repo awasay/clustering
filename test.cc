@@ -22,6 +22,8 @@ int main(){
 	d->AddClusterCenters(1);
 	printf("%f\n",d->GetDistance(0,1));
 	t->end();
+	sleep(5);
 	p->endPerf();
+
 	return 0;
 }

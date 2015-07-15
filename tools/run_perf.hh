@@ -11,19 +11,19 @@ void* status;
 class perfProfiler{
 
 private:
-	char* events;
+	string events;
 	void runPerf();
 	int perf_id;
 	bool power;
 public:
-	perfProfiler(char* e,bool p);
+	perfProfiler(string e,bool p);
 	void startPerf();
 	void endPerf();
 };
 
 
 
-perfProfiler::perfProfiler(char* e,bool p){
+perfProfiler::perfProfiler(string e,bool p){
 	events=e;
 	power=p;
 }
@@ -33,11 +33,11 @@ void perfProfiler::runPerf(){
 	int perf_pid = getppid();
     char perf_pid_opt[9];
     snprintf(perf_pid_opt, 24, "%d", perf_pid);
-    char *perfargs_system[8] = {"perf", "stat", "-a", "-x,", "-e",
-        	events, NULL,NULL};
+    const char *perfargs_system[8] = {"perf", "stat", "-a", "-x,", "-e",
+        	events.c_str(), NULL,NULL};
     
-    char *perfargs[9] = {"perf", "stat", "-x,", "-e",
-        	events, "-p",
+    const char *perfargs[9] = {"perf", "stat", "-x,", "-e",
+        	events.c_str(), "-p",
         	perf_pid_opt, NULL,NULL};
     //char *perfargs[6] = {"perf", "stat" ,"-x,", "-e",
       //  	events};
@@ -45,9 +45,9 @@ void perfProfiler::runPerf(){
     	//char *perfargs[6] = {"perf", "stat", "-a" ,"-x,", "-e",
         //	events};
     if (power)	
-    	execvp("perf", perfargs_system);
+    	execvp("perf", (char* const*)perfargs_system);
     else
-    	execvp("perf", perfargs);
+    	execvp("perf", (char* const*)perfargs);
     assert(0 && "perf failed to start");
 
 }
