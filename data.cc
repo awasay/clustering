@@ -90,7 +90,7 @@ int Data::LoadData(string file_name, int data_size, int input_dim) {
  * @return      Returns 0 on successfull addition of the Cluster Center.
  * @brief       Randomly initializes the array of size K containing the Cluster Centers
  */
-int Data::initialize_Cluster_Centers(int k) {
+int Data::InitializeClusterCenters(int k) {
 	
 	cluster_centers = new ClusterCenters();
 	cluster_centers->cluster_centers_size = k;
@@ -182,7 +182,6 @@ void Data::PrintDistance(int data_point_position, int cluster_center_position) {
  * @brief                                   Adds a new Cluster Center to the K_array.
  */
 int Data::AddClusterCenters(int data_point_position) {
-
 	assert(data_point_position < data_points_size);
 
 	cluster_centers->centers[cluster_centers->current_position] = data_points[data_point_position];
@@ -260,7 +259,7 @@ void Data::AssignToCenters() {
 }
 
 
-void Data::allocate_space_for_cluster_centers_KPP(int cc_size) {
+void Data::AllocateSpaceForClusterCentersKPP(int cc_size) {
 	cluster_centers = new ClusterCenters();
 	cluster_centers->cluster_centers_size = cc_size;
 	cluster_centers->centers = new DataPoint[cc_size];
@@ -273,7 +272,7 @@ void Data::allocate_space_for_cluster_centers_KPP(int cc_size) {
  *
  * @brief returns the closest cluster center.
  */
-int Data::get_closest_cluster_center(int data_point_position) {
+int Data::GetClosestClusterCenter(int data_point_position) {
 	int min_index = 0;
 	double minimum_distance = -1;
 	int cc_size = cluster_centers->cluster_centers_size;
@@ -293,7 +292,7 @@ int Data::get_closest_cluster_center(int data_point_position) {
 
 
 
-void Data::easy_approximation_of_centers(int data_point_position) {
+void Data::EasyApproximationOfCenters(int data_point_position) {
 	if (glbl_D_x_sqrd > glbl_max_D_x_sqrd) {
 		glbl_max_D_x_sqrd = glbl_D_x_sqrd;
 		glbl_point_with_max_d_x = data_point_position;
@@ -301,30 +300,30 @@ void Data::easy_approximation_of_centers(int data_point_position) {
 }
 
 
-int::Data::flip_a_coin(float probability, int rand_max) {
+int Data::FlipACoin(float probability) {
 	//generate random number beetween 0 and 1
 	double p = ((double)rand() / RAND_MAX);
 	//heads.
 	if (p <= probability) {
 		return 0;
 	}
-	else if (p > probability) { //tails.
+	else { //tails.
 		return 1;
 	}
 }
 
-void Data::difficult_approximation_of_centers(float* array, int sum) {
+void Data::DifficultApproximationOfCenters(float* array, int sum) {
 
 	for (int i = 0; i < data_points_size; ++i) {
 		
 		float probability = array[i] / sum;
-		int coin = flip_a_coin(probability, data_points_size);
+		int coin = FlipACoin(probability);
 		// 0->heads, 1->tails.
 		if (coin == 0) {
 			glbl_point_with_max_d_x = i;
 		}
 		else {
-			easy_approximation_of_centers(i);
+			EasyApproximationOfCenters(i);
 		}
 	}
 }
@@ -334,7 +333,7 @@ void Data::difficult_approximation_of_centers(float* array, int sum) {
  *
  * @brief creates the cluster centers based on the users choice.
  */
-void Data::carefull_seeding_KPP(int K){
+void Data::CarefullSeedingKPP(int K){
 	//initializing 1st center at random.
 	srand(time(NULL));
 	//set cc[0] = ...
@@ -353,7 +352,7 @@ void Data::carefull_seeding_KPP(int K){
 		//iterate threw the data_points.
 		for (int j = 0; j < data_points_size; ++j) {
 			//find the closest cluster center.
-			glbl_closest_center = get_closest_cluster_center(j);
+			glbl_closest_center = GetClosestClusterCenter(j);
 
 			//compute D(x) dist between x and nearest center already chosen.
 			glbl_D_x = GetDistance(j, glbl_closest_center);
@@ -361,7 +360,7 @@ void Data::carefull_seeding_KPP(int K){
 
 
 			//1. Start of easy approximation of center. Point with max (D(x))^2, will be center.
-			//easy_approximation_of_centers(j);
+			//EasyApproximationOfCenters(j);
 			// End of easy approximation. Uncomment this and comment the other implementation to avoid Seg Faults!
 
 
@@ -372,7 +371,7 @@ void Data::carefull_seeding_KPP(int K){
 			sum_D_x_sqrd += glbl_D_x_sqrd;
 		}
 		//2.b Approximating 1 center at a time by flipping a coin.
-		difficult_approximation_of_centers(D_x_array, sum_D_x_sqrd);
+		DifficultApproximationOfCenters(D_x_array, sum_D_x_sqrd);
 
 		AddClusterCenters(glbl_point_with_max_d_x); 
 	}
