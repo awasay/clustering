@@ -3,11 +3,15 @@
 
 #include <assert.h>
 #include <math.h>
+#include <time.h>
+#include <stdlib.h>
+
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <vector>
+#include <limits>
 
 using namespace std;
 
@@ -31,21 +35,34 @@ typedef float DataType;
 	each point in the data set has a dimension and values.
 */
 
-struct DataPoint{
-
+typedef struct DataPoint {
 	DataType* values;
-};
+	DataPoint* center;				//pointer to the center it corresponds to.
+	float minimum_distance;
+}DataPoint;
 
-struct ClusterCenters{
+
+typedef struct ClusterCenters{
 	DataPoint* centers;
-	int current_position=0;
+	int current_position = 0;
 	int cluster_centers_size;
-};
+}ClusterCenters;
 
-class Data{
+
+
+
+/* Global vars*/
+extern float glbl_D_x;
+extern float glbl_D_x_sqrd;
+extern float glbl_max_D_x_sqrd;
+extern float glbl_point_with_max_d_x;
+extern float glbl_point_with_max_d_x_sqrd;
+extern int glbl_closest_center;
+
+
+class Data {
 
 private:
-	
 	DataPoint* data_points; 			/*  The array of stored data values */
 	int dimension;						/*  The dimension of each point */
 	int data_points_size;				/*  Number of data points */
@@ -53,21 +70,39 @@ private:
 
 	vector<string> divide(const string &s, char delim);
 	vector<string>& divide(const string &s, char delim, vector<string> &elems);
+	
+	/* k-means */
+	int AddClusterCenters(int);	/* Add cluster centers */
+	void PrintDistance(int data_point_position, int cluster_center_position);
 
+	/* k-means ++ */
+	int GenerateRandomNumber(int);
+	int GetClosestClusterCenter(int);
+	void EasyApproximationOfCenters(int);
+	void DifficultApproximationOfCenters(float*, int);
+	int FlipACoin(float);
 
 public:
+	Data();					/*Constructor*/
+	~Data();				/*Destructor*/
+
+	/* k-means */
+	int InitializeClusterCenters(int);
+	DataPoint GetDataPoint(int);  	/* Given a certain position, get the value from the dataset */
+	ClusterCenters GetClusterCenter(int);
 	
-	Data();			/*Constructor*/
-	~Data();		/*Destructor*/
-	int initialize(int k);
-	int LoadData(string file_name, int data_size, int dimension);  		/* Load values from a file */
-	DataPoint GetDataPoint(int position);  	/* Given a certain position, get the value from the dataset */
-	float GetDistance(int data_point_position, int cluster_center_position); /*Get the distance between two points*/
-	int AddClusterCenters(int data_point_position);	/* Add cluster centers */
+
+	/* k-means ++ */
+	void CarefullSeedingKPP(int);
+	void AllocateSpaceForClusterCentersKPP(int);
+
+
+	/* shared stuff */
+	int LoadData(string, int, int);  		/* Load values from a file */
+	void PrintAllDistances();
+	float GetDistance(int, int); /*Get the distance between two points*/
 	int PrintData();
-
-
-
+	void AssignToCenters();
 };
 
 
