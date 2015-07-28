@@ -76,25 +76,25 @@ private:
 	void PrintDistance(int data_point_position, int cluster_center_position);
 
 	/* k-means ++ */
-	int generate_random_number(int);
-	int get_closest_cluster_center(int);
-	void easy_approximation_of_centers(int);
-	void difficult_approximation_of_centers(float*, int);
-	int flip_a_coin(float, int);
+	int GenerateRandomNumber(int);
+	int GetClosestClusterCenter(int);
+	void EasyApproximationOfCenters(int);
+	void DifficultApproximationOfCenters(float*, int);
+	int FlipACoin(float);
 
 public:
 	Data();					/*Constructor*/
 	~Data();				/*Destructor*/
 
 	/* k-means */
-	int initialize_Cluster_Centers(int);
+	int InitializeClusterCenters(int);
 	DataPoint GetDataPoint(int);  	/* Given a certain position, get the value from the dataset */
 	ClusterCenters GetClusterCenter(int);
 	
 
 	/* k-means ++ */
-	void carefull_seeding_KPP(int);
-	void allocate_space_for_cluster_centers_KPP(int);
+	void CarefullSeedingKPP(int);
+	void AllocateSpaceForClusterCentersKPP(int);
 
 
 	/* shared stuff */
